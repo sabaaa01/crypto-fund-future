@@ -72,6 +72,15 @@ class Web3Service {
     }
   ];
 
+  // Add a list of recent transactions
+  private transactions: Array<{
+    type: 'contribution' | 'withdrawal' | 'creation';
+    campaignId: string;
+    amount?: string;
+    timestamp: number;
+    from: string;
+  }> = [];
+
   // Check if MetaMask is available
   async connectWallet() {
     if (typeof window === 'undefined' || !window.ethereum) {
@@ -171,7 +180,31 @@ class Web3Service {
       return true;
       */
 
-      // For the MVP, we simulate success
+      // For the MVP, we simulate success and add to mock campaigns
+      const newId = (this.mockCampaigns.length + 1).toString();
+      const newCampaign = {
+        id: newId,
+        owner: this.currentAccount || "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+        title: campaign.title,
+        description: campaign.description,
+        imageUrl: campaign.imageUrl || "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d",
+        goal: ethers.parseEther(campaign.goal).toString(),
+        deadline: campaign.deadline,
+        amountRaised: "0",
+        contributors: [],
+        contributionsCount: 0,
+        isActive: true
+      };
+      
+      this.mockCampaigns.push(newCampaign);
+      
+      // Add transaction record
+      this.addTransaction({
+        type: 'creation',
+        campaignId: newId,
+        from: this.currentAccount || "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      });
+      
       toast.success("Campaign created successfully", {
         description: "Your campaign is now live on the blockchain"
       });
@@ -203,7 +236,28 @@ class Web3Service {
       return true;
       */
 
-      // For the MVP, we simulate success
+      // For the MVP, we simulate success by updating mock data
+      const campaign = this.mockCampaigns.find(c => c.id === campaignId);
+      if (campaign) {
+        const amountWei = ethers.parseEther(amount);
+        campaign.amountRaised = (BigInt(campaign.amountRaised) + amountWei).toString();
+        campaign.contributionsCount += 1;
+        
+        // Add the contributor if not already in the list
+        const contributor = this.currentAccount || "0x123...";
+        if (!campaign.contributors.includes(contributor)) {
+          campaign.contributors.push(contributor);
+        }
+        
+        // Add transaction record
+        this.addTransaction({
+          type: 'contribution',
+          campaignId,
+          amount,
+          from: this.currentAccount || "0x123...",
+        });
+      }
+
       toast.success("Contribution successful", {
         description: `You contributed ${amount} ETH to this campaign`
       });
@@ -233,7 +287,14 @@ class Web3Service {
       return true;
       */
 
-      // For the MVP, we simulate success
+      // Add transaction record
+      this.addTransaction({
+        type: 'withdrawal',
+        campaignId,
+        amount: this.mockCampaigns.find(c => c.id === campaignId)?.amountRaised || "0",
+        from: this.currentAccount || "0x123...",
+      });
+
       toast.success("Funds withdrawn successfully", {
         description: "The funds have been transferred to your wallet"
       });
@@ -245,6 +306,24 @@ class Web3Service {
       });
       return false;
     }
+  }
+
+  // Add a method to add transactions
+  private addTransaction(tx: {
+    type: 'contribution' | 'withdrawal' | 'creation';
+    campaignId: string;
+    amount?: string;
+    from: string;
+  }) {
+    this.transactions.push({
+      ...tx,
+      timestamp: Math.floor(Date.now() / 1000)
+    });
+  }
+
+  // Add a method to get recent transactions
+  getTransactions() {
+    return [...this.transactions].reverse();
   }
 
   getCampaignStatus(campaign: any) {
