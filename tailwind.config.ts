@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,11 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom theme colors
+				brand: {
+					DEFAULT: '#3B82F6', // Blue
+					accent: '#8B5CF6'    // Purple
 				}
 			},
 			borderRadius: {
@@ -84,11 +90,25 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.8' },
+				},
+				'gradient-flow': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+					'100%': { backgroundPosition: '0% 50%' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-slow': 'pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'gradient-flow': 'gradient-flow 3s ease infinite'
+			},
+			backgroundImage: {
+				'hero-pattern': 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
 			}
 		}
 	},
