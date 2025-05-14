@@ -49,30 +49,16 @@ const Index = () => {
       <main className="flex-grow container mx-auto py-8 px-4">
         <section className="mb-12">
           <div className="rounded-2xl overflow-hidden relative bg-hero-pattern animate-gradient-flow">
-            <div className="bg-black/20 p-8 md:p-12">
+            <div className="bg-black/10 p-8 md:p-12">
               <div className="max-w-3xl">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">
                   Fund Your Vision with Blockchain
                 </h1>
-                <p className="text-lg mb-8 text-white/90">
+                <p className="text-lg mb-8 text-gray-700">
                   Launch or contribute to decentralized fundraising campaigns. Transparent, 
                   secure, and powered by blockchain technology.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/create">
-                    <Button size="lg" className="w-full sm:w-auto">
-                      <Plus className="mr-2 h-4 w-4" /> Create Campaign
-                    </Button>
-                  </Link>
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="w-full sm:w-auto border-white/20 hover:bg-white/10"
-                    onClick={() => web3Service.connectWallet()}
-                  >
-                    Connect Wallet
-                  </Button>
-                </div>
+                {/* Buttons removed from hero section as requested */}
               </div>
             </div>
           </div>
@@ -132,7 +118,7 @@ const Index = () => {
         </div>
       </main>
       
-      <footer className="border-t border-white/10 py-6">
+      <footer className="border-t border-gray-200 py-6">
         <div className="container mx-auto text-center text-sm text-muted-foreground">
           <p>CryptoFund - A decentralized crowdfunding platform powered by blockchain</p>
         </div>
